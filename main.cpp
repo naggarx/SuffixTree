@@ -21,6 +21,10 @@ public:
         index = -1;
         Suffindex = -1;
     }
+    void setsuff(int k)
+    {
+        Suffindex = k;
+    }
 };
 class SuffixTree
 {
@@ -36,15 +40,18 @@ class SuffixTree
        int suff = 0;
        for (int i = 0; i < strlen(st1); ++i)
        {
+           Node* curr = Root;
            int j = i;
            char c = st1[j];
-           while(Root->child[c-'a'].index != -1)
+           while(curr->child[c-'a'].index != -1)
            {
+               curr = &curr->child[c-'a'];
                j++;
                c=st1[j];
            }
-           Node* NewNode = new Node(j, 0);
-           Root->child[c-'a'] = *NewNode;
+           Node* NewNode = new Node(j, suff);
+           curr->setsuff(-1);
+           curr->child[c-'a'] = *NewNode;
            suff++;
        }
 
