@@ -5,11 +5,10 @@
 using namespace std;
 class Node
 {
+public:
     Node* child;
     int index;
     int Suffindex;
-
-public:
     Node(int i , int suff)
     {
         child = new Node[26];
@@ -19,26 +18,34 @@ public:
     Node()
     {
         child = nullptr;
-        index = 0;
-        Suffindex = 0;
+        index = -1;
+        Suffindex = -1;
     }
 };
 class SuffixTree
 {
 
    Node* Root;
-   char* st;
    SuffixTree()
    {
       Root = nullptr;
-      st = nullptr;
    }
    SuffixTree(char st1 [])
    {
-       
-       for (int i = 0; i < st.; ++i)
-       {
 
+       int suff = 0;
+       for (int i = 0; i < strlen(st1); ++i)
+       {
+           int j = i;
+           char c = st1[j];
+           while(Root->child[c-'a'].index != -1)
+           {
+               j++;
+               c=st1[j];
+           }
+           Node* NewNode = new Node(j, 0);
+           Root->child[c-'a'] = *NewNode;
+           suff++;
        }
 
    }
