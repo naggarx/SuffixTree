@@ -6,18 +6,16 @@ using namespace std;
 class Node
 {
 public:
-    Node* child;
+    Node* child[27]={nullptr};
     int index;
     int Suffindex;
     Node(int i , int suff)
     {
-        child = new Node[26];
         index = i;
         Suffindex = suff;
     }
     Node()
     {
-        child = nullptr;
         index = -1;
         Suffindex = -1;
     }
@@ -28,32 +26,37 @@ public:
 };
 class SuffixTree
 {
-
+public:
    Node* Root;
    SuffixTree()
    {
       Root = nullptr;
    }
-   SuffixTree(char st1 [])
+   SuffixTree(string st1 )
    {
-
+       Root = new Node;
        int suff = 0;
-       for (int i = 0; i < strlen(st1); ++i)
+       for (int i = 0; i < st1.size(); ++i)
        {
            Node* curr = Root;
            int j = i;
            char c = st1[j];
-           while(curr->child[c-'a'].index != -1)
+           while(curr->child[c-'a'] != nullptr )
            {
-               curr = &curr->child[c-'a'];
+               curr = curr->child[c-'a'];
                j++;
                c=st1[j];
+
            }
-           Node* NewNode = new Node(j, suff);
+           Node* NewNode = new Node(i, suff);
            curr->setsuff(-1);
-           curr->child[c-'a'] = *NewNode;
+           curr->child[st1[i]-'a'] = NewNode;
            suff++;
        }
+       
+
+
+
 
    }
 
@@ -65,6 +68,7 @@ class SuffixTree
 };
 int main()
 {
-    std::cout << "Hello, World!" << std::endl;
+    SuffixTree("banan");
+            //      01234
     return 0;
 }
