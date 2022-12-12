@@ -32,11 +32,12 @@ public:
    {
       Root = nullptr;
    }
-   SuffixTree(string st1 )
+   SuffixTree(const string &st )
    {
+       const char* st1 = st.c_str();
        Root = new Node;
        int suff = 0;
-       for (int i = 0; i < st1.size(); ++i)
+       for (int i = 0; i < strlen(st1); ++i)
        {
            Node* curr = Root;
            int j = i;
@@ -53,7 +54,7 @@ public:
            curr->child[st1[i]-'a'] = NewNode;
            suff++;
        }
-       
+
 
 
 
