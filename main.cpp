@@ -7,9 +7,9 @@ class Node
 {
 public:
     Node* child[27]={nullptr};
-    int index;
-    int Suffindex;
-    Node(int i , int suff)
+    long long index;
+    long long Suffindex;
+    Node(long long i , long long suff)
     {
         index = i;
         Suffindex = suff;
@@ -19,7 +19,7 @@ public:
         index = -1;
         Suffindex = -1;
     }
-    void setsuff(int k)
+    void setsuff(long long k)
     {
         Suffindex = k;
     }
@@ -28,30 +28,52 @@ class SuffixTree
 {
 public:
    Node* Root;
+   const char* st1;
    SuffixTree()
    {
       Root = nullptr;
+      st1 = nullptr;
    }
    SuffixTree(const string &st )
    {
-       const char* st1 = st.c_str();
+       st1 = st.c_str();
        Root = new Node;
-       int suff = 0;
+       long long suff = 0;
        for (int i = 0; i < strlen(st1); ++i)
        {
            Node* curr = Root;
            int j = i;
            char c = st1[j];
+           if(c == '$')
+           {
+               Node* NewNode = new Node(i, suff);
+               curr->child[26] = NewNode;
+               break;
+           }
            while(curr->child[c-'a'] != nullptr )
            {
                curr = curr->child[c-'a'];
                j++;
-               c=st1[j];
+               c=st1[j]; //GANOON MSH BTHEBK
 
            }
-           Node* NewNode = new Node(i, suff);
-           curr->setsuff(-1);
-           curr->child[st1[i]-'a'] = NewNode;
+           if(j == i)
+           {
+               Node* NewNode = new Node(j, suff);
+               curr->child[st1[j]-'a'] = NewNode;
+           }
+           else
+           {
+               Node* NewNode2 = new Node(strlen(st1)-1,suff);
+               curr->child[26] = NewNode2;
+               long long temp = curr->index + (j-i+1);
+               Node* NewNode = new Node(temp, curr->Suffindex);
+               curr->child[st[temp] - 'a'] = NewNode;
+               curr->setsuff(-1);
+
+
+
+           }
            suff++;
        }
 
@@ -66,10 +88,11 @@ public:
 
 
 
+
 };
 int main()
 {
-    SuffixTree("banan");
+    SuffixTree("banan$");
             //      01234
     return 0;
 }
