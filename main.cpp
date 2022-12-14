@@ -64,14 +64,16 @@ public:
            }
            else
            {
-               Node* NewNode2 = new Node(strlen(st1)-1,suff);
-               curr->child[26] = NewNode2;
+               if(j == strlen(st1)-1)
+               {
+                   j--;
+               }
                long long temp = curr->index + (j-i+1);
                Node* NewNode = new Node(temp, curr->Suffindex);
                curr->child[st[temp] - 'a'] = NewNode;
                curr->setsuff(-1);
-
-
+               Node* NewNode2 = new Node(strlen(st1)-1,suff);
+               curr->child[26] = NewNode2;
 
            }
            suff++;
