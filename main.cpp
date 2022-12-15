@@ -23,6 +23,10 @@ public:
     {
         Suffindex = k;
     }
+    void setindex(long long k)
+    {
+        index = k;
+    }
 };
 class SuffixTree
 {
@@ -45,7 +49,13 @@ public:
            long long coun = 0;
            long long j = i;
            long long temp = -1 ;
-           if(curr->child[st1[j] - 'a'] != nullptr && st1[j] != '$')
+           if(st1[j] == '$')
+           {
+               Node* NewNode2 = new Node(strlen(st1)-1,suff);
+               Root->child[26] = NewNode2;
+               break;
+           }
+           if(curr->child[st1[j] - 'a'] != nullptr)
                temp = curr->child[st1[j] - 'a']->index;
            else
            {
@@ -54,7 +64,8 @@ public:
                suff++;
                continue;
            }
-           for (long long k = j; k < strlen(st1); ++k)
+           bool found=true;
+           for (long long k = j; k < strlen(st1)-1; ++k)
            {
                if(st1[k] == st1[temp] )
                {
@@ -62,16 +73,36 @@ public:
                    temp++;
                }
                else
+               {
+                   found = false;
                    break;
+               }
            }
-           Node* NewNode = new Node(temp+1,Root->child[st1[i] - 'a']->Suffindex);
-           Root->child[st1[i] - 'a']->setsuff(-1);
-           Root->child[st1[i] - 'a']->child[st1[temp+1] - 'a'] = NewNode;
-           Node* NewNode2 = new Node(strlen(st1)-1,suff);
-           Root->child[st1[i] - 'a']->child[26] = NewNode2;
+           if(found)
+           {
+               if(Root->child[st1[i]-'a']->child[st[temp] - 'a'] != nullptr && Root->child[st1[i]-'a']->child[st[temp] - 'a']->index == temp && st[temp] != '$')
+               {
+                   cout<<i<<endl;
+                   Node *newNode = new Node(strlen(st1) - 1, suff);
+                   Root->child[st1[i] - 'a']->child[26] = newNode;
+                   suff++;
+                   continue;
+               }
+           }
+           // temp -> char to update node
+           // j char to create node
+           Node* NewNode = new Node(Root->child[st1[i]-'a']->index,-1);
+           NewNode->child[st1[temp] - 'a'] = Root->child[st1[i]-'a'];
+           Root->child[st1[i]-'a']->setindex(temp);
+           Root->child[st1[i] - 'a']=NewNode;
+           Node* NewNode2 = new Node(j+coun,suff);
+           if(j+coun >= strlen(st1)-1)
+            Root->child[st1[i] - 'a']->child[26] = NewNode2;
+           else
+               Root->child[st1[i] - 'a']->child[st1[j+coun]-'a'] = NewNode2;
            suff++;
        }
-        cout<<Root->index;
+         cout<<Root->index;
 
 
 
@@ -87,7 +118,7 @@ public:
 };
 int main()
 {
-    SuffixTree("banan$");
+    SuffixTree("papatpap$");
             //      01234
     return 0;
 }
