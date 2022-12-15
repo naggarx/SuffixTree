@@ -42,43 +42,36 @@ public:
        for (int i = 0; i < strlen(st1); ++i)
        {
            Node* curr = Root;
-           int j = i;
-           char c = st1[j];
-           if(c == '$')
-           {
-               Node* NewNode = new Node(i, suff);
-               curr->child[26] = NewNode;
-               break;
-           }
-           while(curr->child[c-'a'] != nullptr )
-           {
-               curr = curr->child[c-'a'];
-               j++;
-               c=st1[j]; //GANOON MSH BTHEBK
-
-           }
-           if(j == i)
-           {
-               Node* NewNode = new Node(j, suff);
-               curr->child[st1[j]-'a'] = NewNode;
-           }
+           long long coun = 0;
+           long long j = i;
+           long long temp = -1 ;
+           if(curr->child[st1[j] - 'a'] != nullptr && st1[j] != '$')
+               temp = curr->child[st1[j] - 'a']->index;
            else
            {
-               if(j == strlen(st1)-1)
-               {
-                   j--;
-               }
-               long long temp = curr->index + (j-i+1);
-               Node* NewNode = new Node(temp, curr->Suffindex);
-               curr->child[st[temp] - 'a'] = NewNode;
-               curr->setsuff(-1);
-               Node* NewNode2 = new Node(strlen(st1)-1,suff);
-               curr->child[26] = NewNode2;
-
+               Node* NewNode = new Node(i,suff);
+               Root->child[st1[i] - 'a'] = NewNode;
+               suff++;
+               continue;
            }
+           for (long long k = j; k < strlen(st1); ++k)
+           {
+               if(st1[k] == st1[temp] )
+               {
+                   coun++;
+                   temp++;
+               }
+               else
+                   break;
+           }
+           Node* NewNode = new Node(temp+1,Root->child[st1[i] - 'a']->Suffindex);
+           Root->child[st1[i] - 'a']->setsuff(-1);
+           Root->child[st1[i] - 'a']->child[st1[temp+1] - 'a'] = NewNode;
+           Node* NewNode2 = new Node(strlen(st1)-1,suff);
+           Root->child[st1[i] - 'a']->child[26] = NewNode2;
            suff++;
        }
-
+        cout<<Root->index;
 
 
 
